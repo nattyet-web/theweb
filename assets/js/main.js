@@ -29,10 +29,16 @@ async function fetchPosts() {
 
 async function displayPosts(posts) {
     const postContainer = document.getElementById('postContainer');
-    postContainer.innerHTML = ''; // Clear posts
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    
+    // Show the loading spinner
+    loadingSpinner.style.display = 'block';
+    
+    // Clear the post container
+    postContainer.innerHTML = '';
 
-    // Hide posts container before adding new posts
-    postContainer.style.opacity = 0;
+    // Simulate loading time (optional)
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     const start = (currentPage - 1) * postsPerPage;
     const end = start + postsPerPage;
@@ -50,67 +56,40 @@ async function displayPosts(posts) {
 
         postContainer.appendChild(postElement);
 
-        // Insert first ad after the 5th post
+        // Insert ad after the 5th and 10th post
         if ((index + 1) === 5) {
-            const adContainer = document.createElement('div');
-            adContainer.classList.add('ad-container');
-            postContainer.appendChild(adContainer);
-
-            const adScriptConfig = document.createElement('script');
-            adScriptConfig.type = 'text/javascript';
-            adScriptConfig.text = `
-                atOptions = {
-                    'key' : '94e546547f0c1d04bcc33be261ff8357',
-                    'format' : 'iframe',
-                    'height' : 300,
-                    'width' : 160,
-                    'params' : {}
-                };
-            `;
-            adContainer.appendChild(adScriptConfig);
-
-            // Use setTimeout to ensure script is properly appended and executed
-            setTimeout(() => {
-                const adScript = document.createElement('script');
-                adScript.type = 'text/javascript';
-                adScript.src = "//constellationbedriddenexams.com/94e546547f0c1d04bcc33be261ff8357/invoke.js";
-                adContainer.appendChild(adScript);
-            }, 100);
-        }
-
-        // Insert second ad after the 10th post
-        if ((index + 1) === 10) {
-            const adContainer10 = document.createElement('div');
-            adContainer10.classList.add('ad-container');
-            postContainer.appendChild(adContainer10);
-
-            const adScriptConfig10 = document.createElement('script');
-            adScriptConfig10.type = 'text/javascript';
-            adScriptConfig10.text = `
-                atOptions = {
-                    'key' : '2a2b18c6d0e7fc8c71926bf73216c8a8',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            `;
-            adContainer10.appendChild(adScriptConfig10);
-
-            // Use setTimeout to ensure script is properly appended and executed
-            setTimeout(() => {
-                const adScript10 = document.createElement('script');
-                adScript10.type = 'text/javascript';
-                adScript10.src = "//constellationbedriddenexams.com/2a2b18c6d0e7fc8c71926bf73216c8a8/invoke.js";
-                adContainer10.appendChild(adScript10);
-            }, 100);
+            insertAd(postContainer);
+        } else if ((index + 1) === 10) {
+            insertAd(postContainer, true);
         }
     });
 
-    // Show posts container after adding new posts
-    setTimeout(() => {
-        postContainer.style.opacity = 1;
-    }, 100);
+    // Hide the loading spinner after posts are loaded
+    loadingSpinner.style.display = 'none';
+}
+
+function insertAd(postContainer, isSecondAd = false) {
+    const adContainer = document.createElement('div');
+    adContainer.classList.add('ad-container');
+    postContainer.appendChild(adContainer);
+
+    const adScriptConfig = document.createElement('script');
+    adScriptConfig.type = 'text/javascript';
+    adScriptConfig.text = `
+        atOptions = {
+            'key' : '${isSecondAd ? '2a2b18c6d0e7fc8c71926bf73216c8a8' : '94e546547f0c1d04bcc33be261ff8357'}',
+            'format' : 'iframe',
+            'height' : ${isSecondAd ? '250' : '300'},
+            'width' : ${isSecondAd ? '300' : '160'},
+            'params' : {}
+        };
+    `;
+    adContainer.appendChild(adScriptConfig);
+
+    const adScript = document.createElement('script');
+    adScript.type = 'text/javascript';
+    adScript.src = `//constellationbedriddenexams.com/${isSecondAd ? '2a2b18c6d0e7fc8c71926bf73216c8a8' : '94e546547f0c1d04bcc33be261ff8357'}/invoke.js`;
+    adContainer.appendChild(adScript);
 }
 
 async function displayPagination(posts) {
@@ -124,10 +103,13 @@ async function displayPagination(posts) {
         if (i === currentPage) {
             pageButton.classList.add('active');
         }
-        pageButton.addEventListener('click', () => {
+        pageButton.addEventListener('click', async () => {
             currentPage = i;
-            displayPosts(posts);
+            await displayPosts(posts);
             displayPagination(posts);
+
+            // Scroll to top of the postContainer
+            document.getElementById('postContainer').scrollIntoView({ behavior: 'smooth' });
         });
         pagination.appendChild(pageButton);
     }
@@ -169,7 +151,7 @@ async function handleSearch() {
     });
 
     currentPage = 1; // Reset to first page for new search
-    displayPosts(filteredPosts);
+    await displayPosts(filteredPosts);
     displayPagination(filteredPosts);
 }
 
@@ -178,7 +160,7 @@ document.getElementById('searchBar').addEventListener('input', handleSearch);
 // Initial display of posts and pagination
 async function initialize() {
     const posts = await fetchPosts();
-    displayPosts(posts);
+    await displayPosts(posts);
     displayPagination(posts);
 }
 
@@ -188,9 +170,9 @@ window.addEventListener("load", function () {
     const preloader = document.getElementById("preloader");
     preloader.classList.add("hide-preloader");
 
-    // Initialize Isotope
-    $('.entry-container').isotope({
-        itemSelector: '.entry-item',
-        layoutMode: 'masonry'
-    });
+    // Initialize Isotope (if necessary)
+    // $('.entry-container').isotope({
+    //     itemSelector: '.entry-item',
+    //     layoutMode: 'masonry'
+    // });
 });
