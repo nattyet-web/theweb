@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- PopMyAds.com Popunder Code for megacelebs.netlify.app -->
+    <script type="text/javascript" data-cfasync="false">
+        var pmauid = '79131';
+        var pmawid = '75091';
+        var fq = '0';
+    </script>
+    <script type="text/javascript" data-cfasync="false" src="https://cdn.popmyads.com/pma.js"></script>
+    
+    <!-- PopMyAds.com Popunder Code End -->
+    <!----------ad cash --------->
+    <script id="aclib" type="text/javascript" src="//acscdn.com/script/aclib.js"></script>
+    <!------------>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--=============== REMIXICONS ===============-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <title>Mega-celeb - Filtered Posts</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GBPH7HNJBV"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GBPH7HNJBV');
+    </script>
+</head>
+<body>
+    <script type='text/javascript' src='//constellationbedriddenexams.com/c7/aa/35/c7aa356d238d9636be852e7833d87197.js'></script>
+    <script type="text/javascript">
+        window._mfq = window._mfq || [];
+        (function() {
+            var mf = document.createElement("script");
+            mf.type = "text/javascript"; mf.defer = true;
+            mf.src = "//cdn.mouseflow.com/projects/aa607353-7e70-411e-83f6-fb9443e1de15.js";
+            document.getElementsByTagName("head")[0].appendChild(mf);
+        })();
+    </script>
+    
+    <!--==================== HEADER ====================-->
+    <header class="header" id="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">Mega-celeb</a>
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="index.html" class="nav__link">
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="filtered.html" class="nav__link">
+                            <span>celebs</span>
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#" class="nav__link">
+                            <span>onlyfan</span>
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#" class="nav__link">
+                            <span>About us</span>
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#" class="nav__link">
+                            <span>Contact</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- Close button -->
+                <div class="nav__close" id="nav-close">
+                    <i class="ri-close-large-line"></i>
+                </div>
+            </div>
+            <!-- Toggle button -->
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="ri-menu-line"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!--==================== MAIN ====================-->
+  
+    
+    <main class="container" id="postContainer">
+        <!-- Filtered posts will be inserted here -->
+        <div class="ad-container" id="adContainer"></div>
+    </main>
+
+    <div class="pagination" id="pagination">
+        <!-- Pagination will be inserted here -->
+    </div>   
+    
+    <script async="async" data-cfasync="false" src="//constellationbedriddenexams.com/1c5a6a51bbc06ede64387300e46161ba/invoke.js"></script>
+    <div id="container-1c5a6a51bbc06ede64387300e46161ba"></div>
+
+    <footer>
+        <div class="footer23-social">
+            <span class="social-item"><a href="http://plus.google.com/" target="_blank"><i class="fa fa-reddit round-icon"></i> Reddit</a></span>
+            <span class="social-item"><a href="http://instagram.com/#" target="_blank"><i class="fa fa-instagram round-icon"></i> Instagram</a></span>
+            <span class="social-item"><a href="http://.tumblr.com" target="_blank"><i class="fa-brands fa-discord"></i>Discord</a></span>
+            <span class="social-item"><a href="https://t.me/celeb_posts" target="_blank"><i class="fa fa-telegram telegram-icon"></i>Telegram</a></span>
+        </div>
+        <div class="footer-link">
+            <div class="footer11">
+                <h2>our policy</h2>
+                <p>term and condition</p>
+                <p>privacy security</p>
+                <p>Disclaimer</p>
+            </div>
+            <div class="footer22">
+                <h2>about us</h2>
+                <p>you can find a celebrities 
+                <br>and onlyfans photo 
+                <br>videos
+                </p>
+            </div>
+        </div>
+        <h1>copyright reserved 2024</h1>
+    </footer>
+    <!--=============== MAIN JS ===============-->
+    <script src="assets/js/main.js"></script>
+
+    <!-- Custom JS for filtering posts -->
+    <script>
+        const postsPerPage = 16;
+        let currentPage = 1;
+        let allPosts = [];
+
+        async function fetchPosts() {
+            try {
+                const response = await fetch('assets/js/post.json');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                allPosts = await response.json();
+                return allPosts;
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+                return [];
+            }
+        }
+
+        function filterPostsByDescription(posts, keyword) {
+            return posts.filter(post => post.description.toLowerCase().includes(keyword.toLowerCase()));
+        }
+
+        function updatePagination(totalPosts) {
+            const paginationContainer = document.getElementById('pagination');
+            paginationContainer.innerHTML = '';
+
+            const totalPages = Math.ceil(totalPosts / postsPerPage);
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.innerText = i;
+                pageButton.onclick = () => {
+                    currentPage = i;
+                    displayPosts(allPosts);
+                };
+
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+
+                paginationContainer.appendChild(pageButton);
+            }
+        }
+
+        async function displayPosts(posts) {
+            const postContainer = document.getElementById('postContainer');
+            postContainer.innerHTML = '';
+            const start = (currentPage - 1) * postsPerPage;
+            const end = start + postsPerPage;
+            const slicedPosts = posts.slice(start, end);
+
+            slicedPosts.forEach((post, index) => {
+                const postElement = document.createElement('div');
+                postElement.classList.add('post');
+                postElement.innerHTML = `
+                    <h2>${post.title}</h2>
+                    ${post.image ? `<img src="${post.image}" alt="${post.title}" loading="lazy">` : ''}
+                    ${post.video ? `<iframe src="${post.video}" frameborder="0"></iframe>` : ''}
+                    <p>${post.description}</p>
+                `;
+
+                postContainer.appendChild(postElement);
+
+                // Insert ad after the 5th post
+                if ((index + 1) === 5) {
+                    const adContainer = document.createElement('div');
+                    adContainer.classList.add('ad-container');
+                    postContainer.appendChild(adContainer);
+
+                    const adScriptConfig = document.createElement('script');
+                    adScriptConfig.type = 'text/javascript';
+                    adScriptConfig.text = `
+                        atOptions = {
+                            'key' : '94e546547f0c1d04bcc33be261ff8357',
+                            'format' : 'iframe',
+                            'height' : 300,
+                            'width' : 160,
+                            'params' : {}
+                        };
+                    `;
+                    adContainer.appendChild(adScriptConfig);
+
+                    const adScript = document.createElement('script');
+                    adScript.type = 'text/javascript';
+                    adScript.src = "//constellationbedriddenexams.com/94e546547f0c1d04bcc33be261ff8357/invoke.js";
+                    adContainer.appendChild(adScript);
+
+                    console.log("Ad script added after post index:", index);
+                }
+
+                // Insert new ad after the 10th post
+                if ((index + 1) === 10) {
+                    const adContainer10 = document.createElement('div');
+                    adContainer10.classList.add('ad-container');
+                    postContainer.appendChild(adContainer10);
+
+                    const adScriptConfig10 = document.createElement('script');
+                    adScriptConfig10.type = 'text/javascript';
+                    adScriptConfig10.text = `
+                        atOptions = {
+                            'key' : '2a2b18c6dbe7814d57e9672b31da0f5b',
+                            'format' : 'iframe',
+                            'height' : 300,
+                            'width' : 160,
+                            'params' : {}
+                        };
+                    `;
+                    adContainer10.appendChild(adScriptConfig10);
+
+                    const adScript10 = document.createElement('script');
+                    adScript10.type = 'text/javascript';
+                    adScript10.src = "//constellationbedriddenexams.com/2a2b18c6dbe7814d57e9672b31da0f5b/invoke.js";
+                    adContainer10.appendChild(adScript10);
+
+                    console.log("Ad script added after post index:", index);
+                }
+            });
+
+            updatePagination(posts.length);
+        }
+
+        async function init(keyword) {
+            const posts = await fetchPosts();
+            const filteredPosts = filterPostsByDescription(posts, keyword);
+            displayPosts(filteredPosts);
+            document.getElementById('preloader').style.display = 'none'; // Hide preloader
+        }
+
+        // Pass the keyword you want to filter by as a parameter to the init function
+        init('onlyfan');
+    </script>
+</body>
+</html>
