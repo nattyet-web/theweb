@@ -29,7 +29,11 @@ async function fetchPosts() {
 
 async function displayPosts(posts) {
     const postContainer = document.getElementById('postContainer');
-    postContainer.innerHTML = '';
+    postContainer.innerHTML = ''; // Clear posts
+
+    // Hide posts container before adding new posts
+    postContainer.style.opacity = 0;
+
     const start = (currentPage - 1) * postsPerPage;
     const end = start + postsPerPage;
     const slicedPosts = posts.slice(start, end);
@@ -46,7 +50,7 @@ async function displayPosts(posts) {
 
         postContainer.appendChild(postElement);
 
-        // Insert ad after the 5th post
+        // Insert first ad after the 5th post
         if ((index + 1) === 5) {
             const adContainer = document.createElement('div');
             adContainer.classList.add('ad-container');
@@ -65,15 +69,16 @@ async function displayPosts(posts) {
             `;
             adContainer.appendChild(adScriptConfig);
 
-            const adScript = document.createElement('script');
-            adScript.type = 'text/javascript';
-            adScript.src = "//constellationbedriddenexams.com/94e546547f0c1d04bcc33be261ff8357/invoke.js";
-            adContainer.appendChild(adScript);
-
-            console.log("Ad script added after post index:", index);
+            // Use setTimeout to ensure script is properly appended and executed
+            setTimeout(() => {
+                const adScript = document.createElement('script');
+                adScript.type = 'text/javascript';
+                adScript.src = "//constellationbedriddenexams.com/94e546547f0c1d04bcc33be261ff8357/invoke.js";
+                adContainer.appendChild(adScript);
+            }, 100);
         }
 
-        // Insert new ad after the 10th post
+        // Insert second ad after the 10th post
         if ((index + 1) === 10) {
             const adContainer10 = document.createElement('div');
             adContainer10.classList.add('ad-container');
@@ -92,14 +97,20 @@ async function displayPosts(posts) {
             `;
             adContainer10.appendChild(adScriptConfig10);
 
-            const adScript10 = document.createElement('script');
-            adScript10.type = 'text/javascript';
-            adScript10.src = "//constellationbedriddenexams.com/2a2b18c6d0e7fc8c71926bf73216c8a8/invoke.js";
-            adContainer10.appendChild(adScript10);
-
-            console.log("New ad script added after post index:", index);
+            // Use setTimeout to ensure script is properly appended and executed
+            setTimeout(() => {
+                const adScript10 = document.createElement('script');
+                adScript10.type = 'text/javascript';
+                adScript10.src = "//constellationbedriddenexams.com/2a2b18c6d0e7fc8c71926bf73216c8a8/invoke.js";
+                adContainer10.appendChild(adScript10);
+            }, 100);
         }
     });
+
+    // Show posts container after adding new posts
+    setTimeout(() => {
+        postContainer.style.opacity = 1;
+    }, 100);
 }
 
 async function displayPagination(posts) {
