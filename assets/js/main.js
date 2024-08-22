@@ -21,6 +21,13 @@ const postsPerPage = 16;
 let currentPage = 1;
 let allPosts = [];
 
+// Create a loading element
+const loadingElement = document.createElement('div');
+loadingElement.id = 'loading';
+loadingElement.innerText = 'Loading...';
+loadingElement.style.display = 'none'; // Initially hidden
+document.body.appendChild(loadingElement); // Append loading element to the body
+
 async function fetchPosts() {
     const response = await fetch('assets/js/post.json');
     allPosts = await response.json();
@@ -29,11 +36,7 @@ async function fetchPosts() {
 
 async function displayPosts(posts) {
     const postContainer = document.getElementById('postContainer');
-    postContainer.innerHTML = ''; // Clear posts
-
-    // Hide posts container before adding new posts
-    postContainer.style.opacity = 0;
-
+    postContainer.innerHTML = '';
     const start = (currentPage - 1) * postsPerPage;
     const end = start + postsPerPage;
     const slicedPosts = posts.slice(start, end);
@@ -50,7 +53,7 @@ async function displayPosts(posts) {
 
         postContainer.appendChild(postElement);
 
-        // Insert first ad after the 5th post
+        // Insert ad after the 5th post
         if ((index + 1) === 5) {
             const adContainer = document.createElement('div');
             adContainer.classList.add('ad-container');
@@ -69,16 +72,15 @@ async function displayPosts(posts) {
             `;
             adContainer.appendChild(adScriptConfig);
 
-            // Use setTimeout to ensure script is properly appended and executed
-            setTimeout(() => {
-                const adScript = document.createElement('script');
-                adScript.type = 'text/javascript';
-                adScript.src = "//constellationbedriddenexams.com/94e546547f0c1d04bcc33be261ff8357/invoke.js";
-                adContainer.appendChild(adScript);
-            }, 100);
+            const adScript = document.createElement('script');
+            adScript.type = 'text/javascript';
+            adScript.src = "//constellationbedriddenexams.com/94e546547f0c1d04bcc33be261ff8357/invoke.js";
+            adContainer.appendChild(adScript);
+
+            console.log("Ad script added after post index:", index);
         }
 
-        // Insert second ad after the 10th post
+        // Insert new ad after the 10th post
         if ((index + 1) === 10) {
             const adContainer10 = document.createElement('div');
             adContainer10.classList.add('ad-container');
@@ -97,20 +99,14 @@ async function displayPosts(posts) {
             `;
             adContainer10.appendChild(adScriptConfig10);
 
-            // Use setTimeout to ensure script is properly appended and executed
-            setTimeout(() => {
-                const adScript10 = document.createElement('script');
-                adScript10.type = 'text/javascript';
-                adScript10.src = "//constellationbedriddenexams.com/2a2b18c6d0e7fc8c71926bf73216c8a8/invoke.js";
-                adContainer10.appendChild(adScript10);
-            }, 100);
+            const adScript10 = document.createElement('script');
+            adScript10.type = 'text/javascript';
+            adScript10.src = "//constellationbedriddenexams.com/2a2b18c6d0e7fc8c71926bf73216c8a8/invoke.js";
+            adContainer10.appendChild(adScript10);
+
+            console.log("New ad script added after post index:", index);
         }
     });
-
-    // Show posts container after adding new posts
-    setTimeout(() => {
-        postContainer.style.opacity = 1;
-    }, 100);
 }
 
 async function displayPagination(posts) {
@@ -124,10 +120,16 @@ async function displayPagination(posts) {
         if (i === currentPage) {
             pageButton.classList.add('active');
         }
-        pageButton.addEventListener('click', () => {
-            currentPage = i;
-            displayPosts(posts);
-            displayPagination(posts);
+        pageButton.addEventListener('click', async () => {
+            loadingElement.style.display = 'block'; // Show loading element
+            currentPage = i; // Update current page
+            await displayPosts(posts); // Display posts for the current page
+            displayPagination(posts); // Update pagination
+
+            // Scroll to the top of the post container
+            postContainer.scrollIntoView({ behavior: 'smooth' });
+
+            loadingElement.style.display = 'none'; // Hide loading element after posts are displayed
         });
         pagination.appendChild(pageButton);
     }
