@@ -47,7 +47,7 @@ async function displayPosts(posts) {
         postElement.innerHTML = `
             <h2>${post.title}</h2>
             ${post.image ? `<img src="${post.image}" alt="${post.title}" loading="lazy">` : ''}
-            ${post.video ? `<iframe src="${post.video}" frameborder="0"></iframe>` : ''}
+            ${post.video ? `<iframe src="${post.video}" width="560" height="315" frameborder="0" allowfullscreen></iframe>` : ''}
             <p>${post.description}</p>
         `;
 
