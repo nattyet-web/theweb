@@ -4,14 +4,14 @@ const navMenu = document.getElementById('nav-menu'),
       navClose = document.getElementById('nav-close');
 
 /* Menu show */
-if(navToggle) {
+if (navToggle) {
    navToggle.addEventListener('click', () => {
       navMenu.classList.add('show-menu');
    });
 }
 
 /* Menu hidden */
-if(navClose) {
+if (navClose) {
    navClose.addEventListener('click', () => {
       navMenu.classList.remove('show-menu');
    });
@@ -31,15 +31,12 @@ document.body.appendChild(loadingElement); // Append loading element to the body
 async function fetchPosts() {
     try {
         const response = await fetch('assets/js/post.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error('Network response was not ok');
         allPosts = await response.json();
         return allPosts;
     } catch (error) {
         console.error('Error fetching posts:', error);
-        alert('Failed to load posts. Please try again later.'); // Notify the user
-        return []; // Return an empty array if there's an error
+        alert('Failed to load posts. Please try again later.');
     }
 }
 
@@ -55,67 +52,77 @@ async function displayPosts(posts) {
         postElement.classList.add('post');
         postElement.innerHTML = `
             <h2>${post.title}</h2>
-            ${post.image ? `<img src="${post.image}" alt="${post.title}" loading="lazy">` : ''}
-            ${post.video ? `<iframe src="${post.video}" width="560" height="315" frameborder="0" allowfullscreen></iframe>` : ''}
+            ${post.image ? `<img data-src="${post.image}" alt="${post.title}" class="lazy-load">` : ''}
+            ${post.video ? `<iframe data-src="${post.video}" width="560" height="315" frameborder="0" allowfullscreen class="lazy-load"></iframe>` : ''}
             <p>${post.description}</p>
         `;
 
         postContainer.appendChild(postElement);
 
-        // Insert ad after the 5th post
-        if ((index + 1) === 5) {
-            const adContainer = document.createElement('div');
-            adContainer.classList.add('ad-container');
-            postContainer.appendChild(adContainer);
+        // Lazy load images and iframes
+        lazyLoadElements();
 
-            const adScriptConfig = document.createElement('script');
-            adScriptConfig.type = 'text/javascript';
-            adScriptConfig.text = `
-                atOptions = {
-                    'key' : '94e546547f0c1d04bcc33be261ff8357',
-                    'format' : 'iframe',
-                    'height' : 300,
-                    'width' : 160,
-                    'params' : {}
-                };
-            `;
-            adContainer.appendChild(adScriptConfig);
-
-            const adScript = document.createElement('script');
-            adScript.type = 'text/javascript';
-            adScript.src = "//constellationbedriddenexams.com/94e546547f0c1d04bcc33be261ff8357/invoke.js";
-            adContainer.appendChild(adScript);
-
-            console.log("Ad script added after post index:", index);
-        }
-
-        // Insert new ad after the 10th post
-        if ((index + 1) === 10) {
-            const adContainer10 = document.createElement('div');
-            adContainer10.classList.add('ad-container');
-            postContainer.appendChild(adContainer10);
-
-            const adScriptConfig10 = document.createElement('script');
-            adScriptConfig10.type = 'text/javascript';
-            adScriptConfig10.text = `
-                atOptions = {
-                    'key' : '2a2b18c6d0e7fc8c71926bf73216c8a8',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            `;
-            adContainer10.appendChild(adScriptConfig10);
-
-            const adScript10 = document.createElement('script');
-            adScript10.type = 'text/javascript';
-            adScript10.src = "//constellationbedriddenexams.com/2a2b18c6d0e7fc8c71926bf73216c8a8/invoke.js";
-            adContainer10.appendChild(adScript10);
-
-            console.log("New ad script added after post index:", index);
-        }
+        // Insert ads after specific posts
+        insertAds(postContainer, index);
     });
+}
+
+// Function to lazy load elements
+function lazyLoadElements() {
+    const lazyLoadElements = document.querySelectorAll('.lazy-load');
+
+    const loadElement = (element) => {
+        const src = element.getAttribute('data-src');
+        if (element.tagName === 'IMG') {
+            element.src = src; // Set the image src
+            element.onload = () => element.classList.add('loaded'); // Optional: add class after load
+        } else if (element.tagName === 'IFRAME') {
+            element.src = src; // Set the iframe src
+        }
+        element.classList.remove('lazy-load'); // Remove the lazy-load class
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                loadElement(entry.target);
+                observer.unobserve(entry.target); // Stop observing after loading
+            }
+        });
+    });
+
+    lazyLoadElements.forEach(element => {
+        observer.observe(element); // Start observing
+    });
+}
+
+// Function to insert ads after specific posts
+function insertAds(postContainer, index) {
+    if ((index + 1) === 5 || (index + 1) === 10) {
+        const adContainer = document.createElement('div');
+        adContainer.classList.add('ad-container');
+        postContainer.appendChild(adContainer);
+
+        const adScriptConfig = document.createElement('script');
+        adScriptConfig.type = 'text/javascript';
+        adScriptConfig.text = `
+            atOptions = {
+                'key' : '${(index + 1) === 5 ? '94e546547f0c1d04bcc33be261ff8357' : '2a2b18c6d0e7fc8c71926bf73216c8a8'}',
+                'format' : 'iframe',
+                'height' : ${(index + 1) === 5 ? '300' : '250'},
+                'width' : ${(index + 1) === 5 ? '160' : '300'},
+                'params' : {}
+            };
+        `;
+        adContainer.appendChild(adScriptConfig);
+
+        const adScript = document.createElement('script');
+        adScript.type = 'text/javascript';
+        adScript.src = `//constellationbedriddenexams.com/${(index + 1) === 5 ? '94e546547f0c1d04bcc33be261ff8357' : '2a2b18c6d0e7fc8c71926bf73216c8a8'}/invoke.js`;
+        adContainer.appendChild(adScript);
+
+        console.log("Ad script added after post index:", index);
+    }
 }
 
 async function displayPagination(posts) {
@@ -189,8 +196,10 @@ document.getElementById('searchBar').addEventListener('input', handleSearch);
 // Initial display of posts and pagination
 async function initialize() {
     const posts = await fetchPosts();
-    displayPosts(posts);
-    displayPagination(posts);
+    if (posts) {
+        displayPosts(posts);
+        displayPagination(posts);
+    }
 }
 
 initialize();
