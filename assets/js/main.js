@@ -29,9 +29,18 @@ loadingElement.style.display = 'none'; // Initially hidden
 document.body.appendChild(loadingElement); // Append loading element to the body
 
 async function fetchPosts() {
-    const response = await fetch('assets/js/post.json');
-    allPosts = await response.json();
-    return allPosts;
+    try {
+        const response = await fetch('assets/js/post.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        allPosts = await response.json();
+        return allPosts;
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        alert('Failed to load posts. Please try again later.'); // Notify the user
+        return []; // Return an empty array if there's an error
+    }
 }
 
 async function displayPosts(posts) {
