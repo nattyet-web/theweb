@@ -5,16 +5,16 @@ const navMenu = document.getElementById('nav-menu'),
 
 /* Menu show */
 if (navToggle) {
-   navToggle.addEventListener('click', () => {
-      navMenu.classList.add('show-menu');
-   });
+    navToggle.addEventListener('click', () => {
+        navMenu.classList.add('show-menu');
+    });
 }
 
 /* Menu hidden */
 if (navClose) {
-   navClose.addEventListener('click', () => {
-      navMenu.classList.remove('show-menu');
-   });
+    navClose.addEventListener('click', () => {
+        navMenu.classList.remove('show-menu');
+    });
 }
 
 const postsPerPage = 16;
