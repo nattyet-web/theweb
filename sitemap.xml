@@ -2,12 +2,22 @@
 <!--  created with Free Online Sitemap Generator www.xml-sitemaps.com  -->
 <url>
 <loc>https://megacelebs.netlify.app/</loc>
-<lastmod>2024-07-31T07:09:48+00:00</lastmod>
+<lastmod>2024-08-30T07:51:18+00:00</lastmod>
 <priority>1.00</priority>
 </url>
 <url>
-<loc>https://megacelebs.netlify.app/filtered</loc>
-<lastmod>2024-07-31T07:09:48+00:00</lastmod>
+<loc>https://megacelebs.netlify.app/celeb</loc>
+<lastmod>2024-08-30T07:51:18+00:00</lastmod>
+<priority>0.80</priority>
+</url>
+<url>
+<loc>https://megacelebs.netlify.app/onlyfans</loc>
+<lastmod>2024-08-30T07:51:18+00:00</lastmod>
+<priority>0.80</priority>
+</url>
+<url>
+<loc>https://megacelebs.netlify.app/link</loc>
+<lastmod>2024-08-30T07:51:18+00:00</lastmod>
 <priority>0.80</priority>
 </url>
 </urlset>
