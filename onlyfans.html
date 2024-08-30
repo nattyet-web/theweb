@@ -83,11 +83,8 @@
     </header>
 
     <!--==================== MAIN ====================-->
-  
-    
     <main class="container" id="postContainer">
         <!-- Filtered posts will be inserted here -->
-        <div class="ad-container" id="adContainer"></div>
     </main>
 
     <div class="pagination" id="pagination">
@@ -176,13 +173,17 @@
             const end = start + postsPerPage;
             const slicedPosts = posts.slice(start, end);
 
+            if (slicedPosts.length === 0) {
+                postContainer.innerHTML = '<p>No posts found.</p>';
+            }
+
             slicedPosts.forEach((post, index) => {
                 const postElement = document.createElement('div');
                 postElement.classList.add('post');
                 postElement.innerHTML = `
                     <h2>${post.title}</h2>
                     ${post.image ? `<img src="${post.image}" alt="${post.title}" loading="lazy">` : ''}
-                    ${post.video ? `<iframe src="${post.video}" frameborder="0"></iframe>` : ''}
+                    ${post.video ? `<iframe src="${post.video}" frameborder="0" allowfullscreen></iframe>` : ''}
                     <p>${post.description}</p>
                 `;
 
