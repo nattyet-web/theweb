@@ -263,7 +263,7 @@
                 // Filter posts containing `#onlyfan` in the description
                 const filteredPosts = posts.filter(post => {
                     const normalizedDescription = normalizeText(post.description);
-                    return normalizedDescription.includes("#onlyfan");
+                    return normalizedDescription.includes("onlyfan");
                 });
                 displayPosts(filteredPosts);
                 displayPagination(filteredPosts);
