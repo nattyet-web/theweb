@@ -159,17 +159,10 @@
             const searchVariants = generateSearchVariants(searchTerm);
             const posts = await fetchPosts();
 
-            filteredPosts = posts.filter(post => {
-                const normalizedTitle = normalizeText(post.title);
-                const normalizedDescription = normalizeText(post.description);
-                const normalizedTags = post.tags ? normalizeText(post.tags.join(' ')) : '';
-
-                return searchVariants.some(variant => 
-                    normalizedTitle.includes(variant) || 
-                    normalizedDescription.includes(variant) || 
-                    normalizedTags.includes(variant)
-                );
-            });
+            // Filter posts to include only those with #onlyfan in the description
+            filteredPosts = posts.filter(post => 
+                normalizeText(post.description).includes("#onlyfan")
+            );
 
             currentPage = 1; // Reset to first page for new search
             displayPosts(filteredPosts);
@@ -227,7 +220,10 @@
         async function initialize() {
             const posts = await fetchPosts();
             if (posts) {
-                filteredPosts = posts; // Display all posts initially
+                // Filter posts to include only those with #onlyfan in the description
+                filteredPosts = posts.filter(post => 
+                    normalizeText(post.description).includes("#onlyfan")
+                );
                 displayPosts(filteredPosts);
                 updatePagination(filteredPosts.length);
             }
