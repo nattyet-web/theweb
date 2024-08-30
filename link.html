@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<link rel="shortcut icon" href="https://i.postimg.cc/sDDG0d7V/-6016995263685706033_121.jpg" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
-	
-	
-
-	
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="https://i.postimg.cc/sDDG0d7V/-6016995263685706033_121.jpg" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
 
     <!--=============== REMIXICONS ===============-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
@@ -15,101 +11,53 @@
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="assets/css/styles.css">
 
-    <title>Mega-celeb - home</title>
+    <title>Mega-celeb - Home</title>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-GBPH7HNJBV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-GBPH7HNJBV');
-</script>
-    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GBPH7HNJBV"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GBPH7HNJBV');
+    </script>
 </head>
 <body>
-    <script type="text/javascript">
-  window._mfq = window._mfq || [];
-  (function() {
-    var mf = document.createElement("script");
-    mf.type = "text/javascript"; mf.defer = true;
-    mf.src = "//cdn.mouseflow.com/projects/aa607353-7e70-411e-83f6-fb9443e1de15.js";
-    document.getElementsByTagName("head")[0].appendChild(mf);
-  })();
-</script>
-    <!--==================== HEADER ====================-->
     <header class="header" id="header">
         <nav class="nav container">
             <a href="index.html" class="nav__logo">Mega-celeb</a>
 
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
-                    <li class="nav__item">
-                        <a href="index.html" class="nav__link">
-                            <span>Home</span>
-                        </a>
-                    </li>
-
-                    <li class="nav__item">
-                        <a href="celeb.html" class="nav__link">
-                            <span>celebs</span>
-                        </a>
-                    </li>
-
-                    <li class="nav__item">
-                        <a href="#" class="nav__link">
-                            <span>onlyfan</span>
-                        </a>
-                    </li>
-
-                    <li class="nav__item">
-                        <a href="#" class="nav__link">
-                            <span>About us</span>
-                        </a>
-                    </li>
-
-                    <li class="nav__item">
-                        <a href="#" class="nav__link">
-                            <span>Contact</span>
-                        </a>
-                    </li>
+                    <li class="nav__item"><a href="index.html" class="nav__link"><span>Home</span></a></li>
+                    <li class="nav__item"><a href="celeb.html" class="nav__link"><span>celebs</span></a></li>
+                    <li class="nav__item"><a href="onlyfans.html" class="nav__link"><span>onlyfan</span></a></li>
+                    <li class="nav__item"><a href="link.html" class="nav__link"><span>onlyfan links</span></a></li>
+                    <li class="nav__item"><a href="#" class="nav__link"><span>About us</span></a></li>
+                    <li class="nav__item"><a href="#" class="nav__link"><span>Contact</span></a></li>
                 </ul>
 
-                <!-- Close button -->
                 <div class="nav__close" id="nav-close">
                     <i class="ri-close-large-line"></i>
                 </div>
             </div>
 
-            <!-- Toggle button -->
             <div class="nav__toggle" id="nav-toggle">
                 <i class="ri-menu-line"></i>
             </div>
         </nav>
     </header>
 
-    <!--==================== MAIN ====================-->
-   
-	<div class="search">
-	    <input type="text" id="searchBar" placeholder="Search...">
-
-	</div>
+    <div class="search">
+        <input type="text" id="searchBar" placeholder="Search...">
+    </div>
     <main class="container" id="postContainer">
-	    
         <!-- Posts will be inserted here -->
-        <!-- Ad container added directly in HTML (optional, as it will be added dynamically by JS) -->
-        <div class="ad-container" id="adContainer">
-            <!-- Ad script will be injected here by JavaScript -->
-        </div>
+        <div class="ad-container" id="adContainer"></div>
     </main>
 
-    <div class="pagination" id="pagination">
-        <!-- Pagination will be inserted here -->
-    </div>   
-	<script async="async" data-cfasync="false" src="//constellationbedriddenexams.com/1c5a6a51bbc06ede64387300e46161ba/invoke.js"></script>
-<div id="container-1c5a6a51bbc06ede64387300e46161ba"></div>
+    <div class="pagination" id="pagination"></div>   
+
     <footer>
-      
         <div class="footer23-social">
             <span class="social-item"><a href="http://plus.google.com/" target="_blank"><i class="fa fa-reddit round-icon"></i> Reddit</a></span>
             <span class="social-item"><a href="http://instagram.com/#" target="_blank"><i class="fa fa-instagram round-icon"></i> Instagram</a></span>
@@ -133,9 +81,204 @@
         </div>
         <h1>copyright reserved 2024</h1>
     </footer>
-    <!--=============== MAIN JS ===============-->
-    <script src="assets/js/link.js"></script>
 
+    <script>
+        /*=============== SHOW MENU ===============*/
+        const navMenu = document.getElementById('nav-menu'),
+              navToggle = document.getElementById('nav-toggle'),
+              navClose = document.getElementById('nav-close');
 
+        /* Menu show */
+        if (navToggle) {
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.add('show-menu');
+            });
+        }
+
+        /* Menu hidden */
+        if (navClose) {
+            navClose.addEventListener('click', () => {
+                navMenu.classList.remove('show-menu');
+            });
+        }
+
+        const postsPerPage = 16;
+        let currentPage = 1;
+        let allPosts = [];
+
+        // Create a loading element
+        const loadingElement = document.createElement('div');
+        loadingElement.id = 'loading';
+        loadingElement.innerText = 'Loading...';
+        loadingElement.style.display = 'none'; // Initially hidden
+        document.body.appendChild(loadingElement); // Append loading element to the body
+
+        async function fetchPosts() {
+            try {
+                const response = await fetch('assets/js/post.json');
+                if (!response.ok) throw new Error('Network response was not ok');
+                allPosts = await response.json();
+                return allPosts;
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+                alert('Failed to load posts. Please try again later.');
+            }
+        }
+
+        async function displayPosts(posts) {
+            const postContainer = document.getElementById('postContainer');
+            postContainer.innerHTML = '';
+            const start = (currentPage - 1) * postsPerPage;
+            const end = start + postsPerPage;
+            const slicedPosts = posts.slice(start, end);
+
+            slicedPosts.forEach((post, index) => {
+                const postElement = document.createElement('div');
+                postElement.classList.add('post');
+                postElement.innerHTML = `
+                    <h2>${post.title}</h2>
+                    ${post.image ? `<img data-src="${post.image}" alt="${post.title}" class="lazy-load">` : ''}
+                    ${post.video ? `<iframe data-src="${post.video}" width="560" height="315" frameborder="0" allowfullscreen class="lazy-load" allow="autoplay; encrypted-media;"></iframe>` : ''}
+                    <p>${post.description}</p>
+                `;
+
+                postContainer.appendChild(postElement);
+
+                // Lazy load images and iframes
+                lazyLoadElements();
+
+                // Insert ads after specific posts
+                insertAds(postContainer, index);
+            });
+        }
+
+        // Function to lazy load elements
+        function lazyLoadElements() {
+            const lazyLoadElements = document.querySelectorAll('.lazy-load');
+
+            const loadElement = (element) => {
+                const src = element.getAttribute('data-src');
+                if (element.tagName === 'IMG') {
+                    element.src = src; // Set the image src
+                    element.onload = () => element.classList.add('loaded'); // Optional: add class after load
+                } else if (element.tagName === 'IFRAME') {
+                    element.src = src; // Set the iframe src
+                }
+                element.classList.remove('lazy-load'); // Remove the lazy-load class
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        loadElement(entry.target);
+                        observer.unobserve(entry.target); // Stop observing after loading
+                    }
+                });
+            });
+
+            lazyLoadElements.forEach(element => {
+                observer.observe(element); // Start observing
+            });
+        }
+
+        // Function to insert ads after specific posts
+        function insertAds(postContainer, index) {
+            if ((index + 1) === 5 || (index + 1) === 10) {
+                const adContainer = document.createElement('div');
+                adContainer.classList.add('ad-container');
+                postContainer.appendChild(adContainer);
+
+                const adScriptConfig = document.createElement('script');
+                adScriptConfig.type = 'text/javascript';
+                adScriptConfig.text = `
+                    atOptions = {
+                        'key' : '${(index + 1) === 5 ? '94e546547f0c1d04bcc33be261ff8357' : '2a2b18c6d0e7fc8c71926bf73216c8a8'}',
+                        'format' : 'iframe',
+                        'height' : ${(index + 1) === 5 ? '300' : '250'},
+                        'width' : ${(index + 1) === 5 ? '160' : '300'},
+                        'params' : {}
+                    };
+                `;
+                adContainer.appendChild(adScriptConfig);
+
+                const adScript = document.createElement('script');
+                adScript.type = 'text/javascript';
+                adScript.src = `//constellationbedriddenexams.com/${(index + 1) === 5 ? '94e546547f0c1d04bcc33be261ff8357' : '2a2b18c6d0e7fc8c71926bf73216c8a8'}/invoke.js`;
+                adContainer.appendChild(adScript);
+
+                console.log("Ad script added after post index:", index);
+            }
+        }
+
+        async function displayPagination(posts) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            const totalPages = Math.ceil(posts.length / postsPerPage);
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+                pageButton.addEventListener('click', async () => {
+                    loadingElement.style.display = 'block'; // Show loading element
+                    currentPage = i; // Update current page
+                    await displayPosts(posts); // Display posts for the current page
+                    displayPagination(posts); // Update pagination
+
+                    // Scroll to the top of the post container
+                    postContainer.scrollIntoView({ behavior: 'smooth' });
+
+                    loadingElement.style.display = 'none'; // Hide loading element after posts are displayed
+                });
+                pagination.appendChild(pageButton);
+            }
+        }
+
+        function normalizeText(text) {
+            return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\W_]+/g, " ").trim();
+        }
+
+        async function handleSearch() {
+            const searchTerm = normalizeText(document.getElementById('searchBar').value);
+            const posts = await fetchPosts();
+
+            // Filter posts containing `#onlyfan` in the description
+            const filteredPosts = posts.filter(post => {
+                const normalizedDescription = normalizeText(post.description);
+                return normalizedDescription.includes("#onlyfan");
+            });
+
+            currentPage = 1; // Reset to first page for new search
+            displayPosts(filteredPosts);
+            displayPagination(filteredPosts);
+        }
+
+        document.getElementById('searchBar').addEventListener('input', handleSearch);
+
+        // Initial display of posts and pagination
+        async function initialize() {
+            const posts = await fetchPosts();
+            if (posts) {
+                // Filter posts containing `#onlyfan` in the description
+                const filteredPosts = posts.filter(post => {
+                    const normalizedDescription = normalizeText(post.description);
+                    return normalizedDescription.includes("megalink");
+                });
+                displayPosts(filteredPosts);
+                displayPagination(filteredPosts);
+            }
+        }
+
+        initialize();
+
+        window.addEventListener("load", function () {
+            const preloader = document.getElementById("preloader");
+            if (preloader) {
+                preloader.classList.add("hide-preloader");
+            }
+        });
+    </script>
 </body>
 </html>
