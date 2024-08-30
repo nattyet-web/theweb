@@ -260,8 +260,13 @@
         async function initialize() {
             const posts = await fetchPosts();
             if (posts) {
-                displayPosts(posts);
-                displayPagination(posts);
+                // Filter posts containing `#onlyfan` in the description
+                const filteredPosts = posts.filter(post => {
+                    const normalizedDescription = normalizeText(post.description);
+                    return normalizedDescription.includes("#onlyfan");
+                });
+                displayPosts(filteredPosts);
+                displayPagination(filteredPosts);
             }
         }
 
