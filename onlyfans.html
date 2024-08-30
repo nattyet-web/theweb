@@ -161,7 +161,7 @@
 
             // Filter posts to include only those with #onlyfan in the description
             filteredPosts = posts.filter(post => 
-                normalizeText(post.description).includes("#onlyfan")
+                normalizeText(post.description).includes("onlyfan")
             );
 
             currentPage = 1; // Reset to first page for new search
