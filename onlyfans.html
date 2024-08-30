@@ -78,10 +78,9 @@
 
     <!--==================== MAIN ====================-->
     
-	<div class="search">
-	    <input type="text" id="searchBar" placeholder="Search...">
-
-	</div>
+    <div class="search">
+        <input type="text" id="searchBar" placeholder="Search...">
+    </div>
     <main class="container" id="postContainer">
         <!-- Filtered posts will be inserted here -->
     </main>
@@ -115,7 +114,7 @@
         <h1>copyright reserved 2024</h1>
     </footer>
 
-    <!-- Custom JS for filtering posts -->
+    <!-- Custom JS for search and pagination -->
     <script>
         const postsPerPage = 16;
         let currentPage = 1;
@@ -132,33 +131,49 @@
                 return allPosts;
             } catch (error) {
                 console.error('Error fetching posts:', error);
+                alert('Failed to load posts. Please try again later.');
                 return [];
             }
         }
 
-        function filterPostsByDescription(posts, keyword) {
-            return posts.filter(post => post.description.toLowerCase().includes(keyword.toLowerCase()));
+        function normalizeText(text) {
+            return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\W_]+/g, " ").trim();
         }
 
-        function updatePagination(totalPosts) {
-            const paginationContainer = document.getElementById('pagination');
-            paginationContainer.innerHTML = '';
+        function generateSearchVariants(text) {
+            const variants = [text];
+            const words = text.split(" ");
 
-            const totalPages = Math.ceil(totalPosts / postsPerPage);
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.innerText = i;
-                pageButton.onclick = () => {
-                    currentPage = i;
-                    displayPosts(filteredPosts);
-                };
-
-                if (i === currentPage) {
-                    pageButton.classList.add('active');
+            if (words.length > 1) {
+                variants.push(words.join(""));
+                for (let i = 1; i < words.length; i++) {
+                    variants.push(words.slice(0, i).join("") + " " + words.slice(i).join(" "));
                 }
-
-                paginationContainer.appendChild(pageButton);
             }
+
+            return variants;
+        }
+
+        async function handleSearch() {
+            const searchTerm = normalizeText(document.getElementById('searchBar').value);
+            const searchVariants = generateSearchVariants(searchTerm);
+            const posts = await fetchPosts();
+
+            filteredPosts = posts.filter(post => {
+                const normalizedTitle = normalizeText(post.title);
+                const normalizedDescription = normalizeText(post.description);
+                const normalizedTags = post.tags ? normalizeText(post.tags.join(' ')) : '';
+
+                return searchVariants.some(variant => 
+                    normalizedTitle.includes(variant) || 
+                    normalizedDescription.includes(variant) || 
+                    normalizedTags.includes(variant)
+                );
+            });
+
+            currentPage = 1; // Reset to first page for new search
+            displayPosts(filteredPosts);
+            displayPagination(filteredPosts);
         }
 
         async function displayPosts(posts) {
@@ -184,19 +199,41 @@
                     postContainer.appendChild(postElement);
                 });
             }
-
-            updatePagination(posts.length);
         }
 
-        async function init(keyword) {
+        function updatePagination(totalPosts) {
+            const paginationContainer = document.getElementById('pagination');
+            paginationContainer.innerHTML = '';
+
+            const totalPages = Math.ceil(totalPosts / postsPerPage);
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+                pageButton.addEventListener('click', async () => {
+                    currentPage = i; // Update current page
+                    await displayPosts(filteredPosts); // Display posts for the current page
+                    updatePagination(filteredPosts.length); // Update pagination
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+        }
+
+        document.getElementById('searchBar').addEventListener('input', handleSearch);
+
+        // Initial display of posts and pagination
+        async function initialize() {
             const posts = await fetchPosts();
-            filteredPosts = filterPostsByDescription(posts, keyword);
-            displayPosts(filteredPosts);
-            document.getElementById('preloader').style.display = 'none'; // Hide preloader
+            if (posts) {
+                filteredPosts = posts; // Display all posts initially
+                displayPosts(filteredPosts);
+                updatePagination(filteredPosts.length);
+            }
         }
 
-        // Initialize with the keyword 'onlyfan'
-        init('onlyfan');
+        initialize();
     </script>
 </body>
 </html>
