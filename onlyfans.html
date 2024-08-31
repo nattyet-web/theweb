@@ -3,20 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="shortcut icon" href="https://i.postimg.cc/sDDG0d7V/-6016995263685706033_121.jpg" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
-
-    <!--=============== REMIXICONS ===============-->
+    <link rel="shortcut icon" href="https://i.postimg.cc/sDDG0d7V/-6016995263685706033_121.jpg" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
-
-    <!--=============== CSS ===============-->
     <link rel="stylesheet" href="assets/css/styles.css">
-
     <title>Mega-celeb - Home</title>
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GBPH7HNJBV"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-GBPH7HNJBV');
     </script>
@@ -25,7 +19,6 @@
     <header class="header" id="header">
         <nav class="nav container">
             <a href="index.html" class="nav__logo">Mega-celeb</a>
-
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="index.html" class="nav__link"><span>Home</span></a></li>
@@ -35,12 +28,10 @@
                     <li class="nav__item"><a href="#" class="nav__link"><span>About us</span></a></li>
                     <li class="nav__item"><a href="#" class="nav__link"><span>Contact</span></a></li>
                 </ul>
-
                 <div class="nav__close" id="nav-close">
                     <i class="ri-close-large-line"></i>
                 </div>
             </div>
-
             <div class="nav__toggle" id="nav-toggle">
                 <i class="ri-menu-line"></i>
             </div>
@@ -52,17 +43,16 @@
     </div>
     <main class="container" id="postContainer">
         <!-- Posts will be inserted here -->
-        <div class="ad-container" id="adContainer"></div>
     </main>
 
-    <div class="pagination" id="pagination"></div>   
+    <div class="pagination" id="pagination"></div>
 
     <footer>
         <div class="footer23-social">
             <span class="social-item"><a href="http://plus.google.com/" target="_blank"><i class="fa fa-reddit round-icon"></i> Reddit</a></span>
             <span class="social-item"><a href="http://instagram.com/#" target="_blank"><i class="fa fa-instagram round-icon"></i> Instagram</a></span>
-            <span class="social-item"><a href="http://.tumblr.com" target="_blank"><i class="fa-brands fa-discord"></i>Discord</a></span>
-            <span class="social-item"><a href="https://t.me/celeb_posts" target="_blank"><i class="fa fa-telegram telegram-icon"></i>Telegram</a></span>
+            <span class="social-item"><a href="http://.tumblr.com" target="_blank"><i class="fa-brands fa-discord"></i> Discord</a></span>
+            <span class="social-item"><a href="https://t.me/celeb_posts" target="_blank"><i class="fa fa-telegram telegram-icon"></i> Telegram</a></span>
         </div>
         <div class="footer-link">
             <div class="footer11">
@@ -125,6 +115,48 @@
             }
         }
 
+        function normalizeText(text) {
+            return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\W_]+/g, " ").trim();
+        }
+
+        function generateSearchVariants(text) {
+            const variants = [text];
+            const words = text.split(" ");
+
+            if (words.length > 1) {
+                variants.push(words.join(""));
+                for (let i = 1; i < words.length; i++) {
+                    variants.push(words.slice(0, i).join("") + " " + words.slice(i).join(" "));
+                }
+            }
+
+            return variants;
+        }
+
+        async function handleSearch() {
+            const searchTerm = normalizeText(document.getElementById('searchBar').value);
+            const searchVariants = generateSearchVariants(searchTerm);
+            const posts = await fetchPosts();
+
+            const filteredPosts = posts.filter(post => {
+                const normalizedTitle = normalizeText(post.title);
+                const normalizedDescription = normalizeText(post.description);
+                const normalizedTags = post.tags ? normalizeText(post.tags.join(' ')) : '';
+
+                return searchVariants.some(variant => 
+                    normalizedTitle.includes(variant) || 
+                    normalizedDescription.includes(variant) || 
+                    normalizedTags.includes(variant)
+                );
+            });
+
+            currentPage = 1; // Reset to first page for new search
+            displayPosts(filteredPosts);
+            displayPagination(filteredPosts);
+        }
+
+        document.getElementById('searchBar').addEventListener('input', handleSearch);
+
         async function displayPosts(posts) {
             const postContainer = document.getElementById('postContainer');
             postContainer.innerHTML = '';
@@ -146,139 +178,71 @@
 
                 // Lazy load images and iframes
                 lazyLoadElements();
-
-                // Insert ads after specific posts
-                insertAds(postContainer, index);
             });
         }
 
-        // Function to lazy load elements
         function lazyLoadElements() {
             const lazyLoadElements = document.querySelectorAll('.lazy-load');
 
             const loadElement = (element) => {
                 const src = element.getAttribute('data-src');
                 if (element.tagName === 'IMG') {
-                    element.src = src; // Set the image src
-                    element.onload = () => element.classList.add('loaded'); // Optional: add class after load
+                    element.src = src;
                 } else if (element.tagName === 'IFRAME') {
-                    element.src = src; // Set the iframe src
+                    element.src = src;
                 }
-                element.classList.remove('lazy-load'); // Remove the lazy-load class
+                element.classList.remove('lazy-load');
             };
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        loadElement(entry.target);
-                        observer.unobserve(entry.target); // Stop observing after loading
+            lazyLoadElements.forEach((element) => {
+                const rect = element.getBoundingClientRect();
+                if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                    loadElement(element);
+                }
+            });
+
+            window.addEventListener('scroll', () => {
+                lazyLoadElements.forEach((element) => {
+                    if (element.classList.contains('lazy-load')) {
+                        const rect = element.getBoundingClientRect();
+                        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                            loadElement(element);
+                        }
                     }
                 });
             });
-
-            lazyLoadElements.forEach(element => {
-                observer.observe(element); // Start observing
-            });
         }
 
-        // Function to insert ads after specific posts
-        function insertAds(postContainer, index) {
-            if ((index + 1) === 5 || (index + 1) === 10) {
-                const adContainer = document.createElement('div');
-                adContainer.classList.add('ad-container');
-                postContainer.appendChild(adContainer);
-
-                const adScriptConfig = document.createElement('script');
-                adScriptConfig.type = 'text/javascript';
-                adScriptConfig.text = `
-                    atOptions = {
-                        'key' : '${(index + 1) === 5 ? '94e546547f0c1d04bcc33be261ff8357' : '2a2b18c6d0e7fc8c71926bf73216c8a8'}',
-                        'format' : 'iframe',
-                        'height' : ${(index + 1) === 5 ? '300' : '250'},
-                        'width' : ${(index + 1) === 5 ? '160' : '300'},
-                        'params' : {}
-                    };
-                `;
-                adContainer.appendChild(adScriptConfig);
-
-                const adScript = document.createElement('script');
-                adScript.type = 'text/javascript';
-                adScript.src = `//constellationbedriddenexams.com/${(index + 1) === 5 ? '94e546547f0c1d04bcc33be261ff8357' : '2a2b18c6d0e7fc8c71926bf73216c8a8'}/invoke.js`;
-                adContainer.appendChild(adScript);
-
-                console.log("Ad script added after post index:", index);
-            }
-        }
-
-        async function displayPagination(posts) {
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = '';
-
+        function displayPagination(posts) {
             const totalPages = Math.ceil(posts.length / postsPerPage);
+            const paginationElement = document.getElementById('pagination');
+            paginationElement.innerHTML = '';
+
             for (let i = 1; i <= totalPages; i++) {
                 const pageButton = document.createElement('button');
                 pageButton.textContent = i;
-                if (i === currentPage) {
-                    pageButton.classList.add('active');
-                }
-                pageButton.addEventListener('click', async () => {
-                    loadingElement.style.display = 'block'; // Show loading element
-                    currentPage = i; // Update current page
-                    await displayPosts(posts); // Display posts for the current page
-                    displayPagination(posts); // Update pagination
-
-                    // Scroll to the top of the post container
-                    postContainer.scrollIntoView({ behavior: 'smooth' });
-
-                    loadingElement.style.display = 'none'; // Hide loading element after posts are displayed
+                pageButton.className = i === currentPage ? 'active' : '';
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    displayPosts(posts);
+                    displayPagination(posts);
                 });
-                pagination.appendChild(pageButton);
+                paginationElement.appendChild(pageButton);
             }
         }
 
-        function normalizeText(text) {
-            return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\W_]+/g, " ").trim();
-        }
-
-        async function handleSearch() {
-            const searchTerm = normalizeText(document.getElementById('searchBar').value);
+        async function initialize() {
             const posts = await fetchPosts();
-
-            // Filter posts containing `#onlyfan` in the description
-            const filteredPosts = posts.filter(post => {
-                const normalizedDescription = normalizeText(post.description);
-                return normalizedDescription.includes("#onlyfan");
-            });
-
-            currentPage = 1; // Reset to first page for new search
+            const filteredPosts = posts.filter(post => 
+                normalizeText(post.title).includes("onlyfan") || 
+                normalizeText(post.description).includes("onlyfan") || 
+                (post.tags && normalizeText(post.tags.join(' ')).includes("onlyfan"))
+            );
             displayPosts(filteredPosts);
             displayPagination(filteredPosts);
         }
 
-        document.getElementById('searchBar').addEventListener('input', handleSearch);
-
-        // Initial display of posts and pagination
-        async function initialize() {
-            const posts = await fetchPosts();
-            if (posts) {
-                // Filter posts containing `#onlyfan` in the description
-                const filteredPosts = posts.filter(post => {
-                    const normalizedDescription = normalizeText(post.description);
-                    return normalizedDescription.includes("onlyfan");
-                });
-                displayPosts(filteredPosts);
-                displayPagination(filteredPosts);
-            }
-        }
-
         initialize();
-
-        window.addEventListener("load", function () {
-            const preloader = document.getElementById("preloader");
-            if (preloader) {
-                preloader.classList.add("hide-preloader");
-            }
-        });
     </script>
 </body>
 </html>
